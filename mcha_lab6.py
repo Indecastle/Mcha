@@ -59,12 +59,19 @@ def razdel(X, Y):
         table[i*2-1][0] = X[i-1]
         table[i*2-1][1] = Y[i-1]
 
+    pol = table[1][1]
     for j in range(2, n):
         for i in range(1+j-1, m-j+1, 2):
             h = j - 1
             table[i][j] = (table[i+1][j-1] - table[i-1][j-1]) / (table[i+h][0] - table[i-h][0])
-            
-    return table
+
+        mul=1
+        for i in range(j-1):
+            mul *= (x-X[i])
+        pol += table[j][j] * mul
+
+    
+    return table, pol
     
 
 
@@ -75,8 +82,8 @@ def main():
     #y = [-14,1014, -0.931596, 0, 0.931596, 14.1014]
     Y = [sm.tan(-1.5), sm.tan(-0.75), sm.tan(0), sm.tan(0.75), sm.tan(1.5)]
 
-    #x = [0, 1, 2, 3]
-    #y = [-2,-5,0,-4]
+    #X = [0, 1, 2, 3]
+    #Y = [-2,-5,0,-4]
 
     #X = [-1, 0, 1, 2]
     #Y = [4, 2, 0, 1]
@@ -86,11 +93,17 @@ def main():
 
     polinom = inter(X, Y)
     print(polinom)
-    print(polinom.subs(x, X[1]+X[2]))
+    print("L4(x1+x2) =", polinom.subs(x, X[1]+X[2]))
     #sm.plot(polinom, (x,-1.5, 1.5), ylim=(-15,15))
 
-    table = razdel(X,Y)
+    table = konechn(X,Y)
     print(tabulate(table, tablefmt = 'fancy_grid'))
+
+    table, pol = razdel(X,Y)
+    print(tabulate(table, tablefmt = 'fancy_grid'))
+    print("Полином Ньютона:", pol.n(2))
+    print("N4(x1+x2) =", pol.subs(x, X[1]+X[2]))
+    #sm.plot(pol, (x,-1.5, 1.5), ylim=(-15,15))
 
 
 
