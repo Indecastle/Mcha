@@ -169,7 +169,7 @@ E = 0.001
 
 
 def main():
-    #plots()
+    plots()
 
     counter, x1 = hord(0.1, 3.0, E, f)
     print(f"Метод хорд: x[{counter}] = {x1}")
